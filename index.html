@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Teleférico · Acceso</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="auth-body">
+    <div id="auth-screen" class="auth-screen">
+        <div class="auth-card">
+            <div class="auth-brand">
+                <img src="img/logo-teleferico.png" alt="Logo Mi Teleférico" class="auth-logo">
+                <div class="auth-brand-text">
+                    <div class="brand-mark">MI<span class="brand-dot"> </span>TELEFÉRICO</div>
+                    <div class="brand-sub">Panel de Prevención</div>
+                </div>
+            </div>
+
+            <!-- LOGIN -->
+            <div id="auth-login" class="auth-form active">
+                <h2>Iniciar Sesión</h2>
+                <p class="auth-desc">Accede al panel de control.</p>
+                <form id="formLogin" novalidate>
+                    <div class="field"><label for="loginEmail">Correo electrónico</label><input type="email" id="loginEmail" placeholder="tu@correo.com" required></div>
+                    <div class="field"><label for="loginPass">Contraseña</label><input type="password" id="loginPass" placeholder="••••••••" required></div>
+                    <div id="loginError" class="error-box" hidden></div>
+                    <button type="submit" class="btn btn-dark w-100 mt-2">Ingresar</button>
+                </form>
+                <div class="auth-links">
+                    <button type="button" class="link-btn" data-auth="register">Crear cuenta</button><span class="sep">·</span><button type="button" class="link-btn" data-auth="recover">Olvidé mi contraseña</button>
+                </div>
+            </div>
+
+            <!-- REGISTRO -->
+            <div id="auth-register" class="auth-form">
+                <h2>Crear Cuenta</h2>
+                <p class="auth-desc">Regístrate para acceder al panel.</p>
+                <form id="formRegister" novalidate>
+                    <div class="field"><label for="regName">Nombre completo</label><input type="text" id="regName" placeholder="Ej. Ana Pérez" required minlength="3"></div>
+                    <div class="field"><label for="regEmail">Correo electrónico</label><input type="email" id="regEmail" placeholder="tu@correo.com" required></div>
+                    <div class="field"><label for="regPass">Contraseña</label><input type="password" id="regPass" placeholder="Mínimo 6 caracteres" required minlength="6"></div>
+                    <div class="field"><label for="regPass2">Confirmar contraseña</label><input type="password" id="regPass2" placeholder="Repite la contraseña" required></div>
+                    <div id="registerError" class="error-box" hidden></div>
+                    <div id="registerSuccess" class="msg-line ok" hidden></div>
+                    <button type="submit" class="btn btn-dark w-100 mt-2">Registrarse</button>
+                </form>
+                <div class="auth-links"><button type="button" class="link-btn" data-auth="login">Volver al inicio</button></div>
+            </div>
+
+            <!-- RECUPERAR -->
+            <div id="auth-recover" class="auth-form">
+                <h2>Recuperar Contraseña</h2>
+                <p class="auth-desc">Ingresa tu correo para restablecerla.</p>
+                <form id="formRecover" novalidate>
+                    <div class="field"><label for="recEmail">Correo electrónico</label><input type="email" id="recEmail" placeholder="tu@correo.com" required></div>
+                    <div id="recoverError" class="error-box" hidden></div>
+                    <div id="recoverStep2" hidden>
+                        <div class="field"><label for="recNewPass">Nueva contraseña</label><input type="password" id="recNewPass" placeholder="Mínimo 6 caracteres" minlength="6"></div>
+                        <div class="field"><label for="recNewPass2">Confirmar nueva contraseña</label><input type="password" id="recNewPass2" placeholder="Repite la contraseña"></div>
+                    </div>
+                    <div id="recoverSuccess" class="msg-line ok" hidden></div>
+                    <button type="submit" class="btn btn-dark w-100 mt-2" id="btnRecover">Restablecer</button>
+                </form>
+                <div class="auth-links"><button type="button" class="link-btn" data-auth="login">Volver al inicio</button></div>
+            </div>
+        </div>
+    </div>
+    <script src="js/auth.js"></script>
+</body>
+</html>

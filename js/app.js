@@ -21,6 +21,10 @@ let mesActual = HOY.getMonth(), anioActual = HOY.getFullYear();
 let colorActualHex = "#388e3c";
 const coloresLineas = { 'verde':'#388e3c', 'roja':'#d32f2f', 'amarilla':'#fbc02d', 'azul':'#1976d2', 'celeste':'#0288d1', 'morada':'#7b1fa2', 'naranja':'#f57c00', 'blanca':'#eeeeee' };
 
+// Claves de historial
+const HIST_M1_KEY = 'simtele_hist_m1';
+const HIST_M3_KEY = 'simtele_hist_m3';
+
 document.addEventListener('DOMContentLoaded', () => {
     const session = localStorage.getItem(SESSION_KEY);
     if (!session) { window.location.href = 'index.html'; return; }
@@ -60,11 +64,14 @@ document.addEventListener('DOMContentLoaded', () => {
     initSensores();
 });
 
-// --- MÓDULO 1: DETENCIÓN (parseFloat, if/else, DOM) ---
+// --- MÓDULO 1: DETENCIÓN (CON HISTORIAL) ---
 function initDetencion() {
     const form = document.getElementById('formDetencion');
     const out = document.getElementById('resultadoDetencion');
     if(!form) return;
+
+    renderHistorialM1(); // Render inicial del historial
+
     form.addEventListener('submit', e => {
         e.preventDefault();
         const v = parseFloat(document.getElementById('velocidad').value);
@@ -79,6 +86,7 @@ function initDetencion() {
         if(d > 50){ nivel='ALTO'; clase='danger'; msg='Distancia ALTA. Aviso didáctico.'; }
         else if(d > 25){ nivel='MEDIO'; clase='warn'; msg='Distancia MEDIA.'; }
         else { nivel='BAJO'; clase='ok'; msg='Distancia dentro de parámetros bajos.'; }
+
         out.hidden = false;
         out.innerHTML = `
             <h3>Resultado</h3>
@@ -89,10 +97,30 @@ function initDetencion() {
                 <div class="metric"><span class="metric-label">Reacción</span><span class="metric-value">${t} s</span></div>
             </div>
             <div class="msg-line ${clase}">${msg}</div>`;
+
+        // Guardar en historial
+        guardarHistorial('m1', { fecha: new Date().toLocaleString(), v, t, d, nivel });
+        renderHistorialM1();
     });
 }
 
-// --- MÓDULO 2: MANTENIMIENTO (Arreglo de objetos, push, filter, Calendario, Tachar) ---
+function renderHistorialM1() {
+    const tbody = document.getElementById('historialM1');
+    if (!tbody) return;
+    const hist = JSON.parse(localStorage.getItem(HIST_M1_KEY)) || [];
+    tbody.innerHTML = '';
+    if (hist.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="empty-row">Sin simulaciones registradas.</td></tr>`;
+        return;
+    }
+    hist.slice().reverse().forEach(h => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td style="font-size:10px">${h.fecha}</td><td>${h.v} km/h</td><td>${h.t} s</td><td>${h.d.toFixed(2)} m</td><td>${h.nivel}</td>`;
+        tbody.appendChild(tr);
+    });
+}
+
+// --- MÓDULO 2: MANTENIMIENTO (Lógica intacta, ya tiene su propia tabla) ---
 function initMantenimiento() {
     const saved = localStorage.getItem('simtele_mantenimientos_v2');
     if(saved) {
@@ -239,11 +267,14 @@ window.eliminarMantenimiento = function(id) {
     renderizarTabla(); generarCalendario();
 };
 
-// --- MÓDULO 3: VIENTO (Arreglos, forEach, sumas, condicionales) ---
+// --- MÓDULO 3: VIENTO (CON HISTORIAL) ---
 function initViento() {
     const form = document.getElementById('formViento');
     const out = document.getElementById('resultadoViento');
     if(!form) return;
+
+    renderHistorialM3(); // Render inicial del historial
+
     form.addEventListener('submit', e => {
         e.preventDefault();
         const vals = [];
@@ -271,10 +302,49 @@ function initViento() {
                 <div class="metric"><span class="metric-label">Clasificación</span><span class="metric-value ${clase}">${clasif}</span></div>
             </div>
             <div class="msg-line ${clase}">Umbrales: &lt;15 calma · &lt;30 moderado · &lt;45 fuerte · ≥45 muy fuerte.</div>`;
+
+        // Guardar en historial
+        guardarHistorial('m3', { fecha: new Date().toLocaleString(), vals: vals.join(' · '), prom, maximo, clasif });
+        renderHistorialM3();
     });
 }
 
-// --- MÓDULO 4: SENSORES (RegExp, test, validaciones, DOM) ---
+function renderHistorialM3() {
+    const tbody = document.getElementById('historialM3');
+    if (!tbody) return;
+    const hist = JSON.parse(localStorage.getItem(HIST_M3_KEY)) || [];
+    tbody.innerHTML = '';
+    if (hist.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="empty-row">Sin análisis registrados.</td></tr>`;
+        return;
+    }
+    hist.slice().reverse().forEach(h => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td style="font-size:10px">${h.fecha}</td><td>${h.vals}</td><td>${h.prom.toFixed(2)} km/h</td><td>${h.maximo.toFixed(2)} km/h</td><td>${h.clasif}</td>`;
+        tbody.appendChild(tr);
+    });
+}
+
+// --- FUNCIÓN GENÉRICA PARA GUARDAR Y LIMPIAR HISTORIALES ---
+function guardarHistorial(mod, data) {
+    const key = mod === 'm1' ? HIST_M1_KEY : HIST_M3_KEY;
+    let hist = JSON.parse(localStorage.getItem(key)) || [];
+    hist.push(data);
+    // Limitar a los últimos 20 registros para no saturar
+    if (hist.length > 20) hist.shift();
+    localStorage.setItem(key, JSON.stringify(hist));
+}
+
+window.limpiarHistorial = function(mod) {
+    const key = mod === 'm1' ? HIST_M1_KEY : HIST_M3_KEY;
+    if (confirm('¿Seguro que deseas borrar todo el historial?')) {
+        localStorage.removeItem(key);
+        if (mod === 'm1') renderHistorialM1();
+        else if (mod === 'm3') renderHistorialM3();
+    }
+};
+
+// --- MÓDULO 4: SENSORES (Lógica intacta, ya tiene su propia tabla) ---
 function initSensores() {
     const form = document.getElementById('formSensores');
     const errBox = document.getElementById('errorSensor');

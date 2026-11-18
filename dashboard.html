@@ -55,9 +55,20 @@
                 </form>
                 <div id="resultadoDetencion" class="result-box" hidden></div>
                 <div class="formula-box"><span class="formula-label">Fórmula</span><code>d = (v / 3.6) × t</code><span class="formula-hint">Umbral didáctico: &gt; 50 m es <b>ALTO</b>.</span></div>
+
+                <!-- HISTORIAL MÓDULO 1 -->
+                <div class="history-section mt-4">
+                    <div class="sub-head"><h3 class="sub-title">Historial de Simulaciones</h3><button class="btn btn-outline btn-sm" onclick="limpiarHistorial('m1')">Limpiar</button></div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead><tr><th>Fecha/Hora</th><th>Velocidad</th><th>Reacción</th><th>Distancia</th><th>Nivel</th></tr></thead>
+                            <tbody id="historialM1"></tbody>
+                        </table>
+                    </div>
+                </div>
             </section>
 
-            <!-- MÓDULO 2: MANTENIMIENTO (CON CALENDARIO Y TACHAR) -->
+            <!-- MÓDULO 2: MANTENIMIENTO -->
             <section class="mod" id="m2" hidden>
                 <div class="maint-layout">
                     <div class="maint-col">
@@ -66,14 +77,7 @@
                             <div class="field">
                                 <label for="selectLinea">Línea a mantener</label>
                                 <select id="selectLinea" required>
-                                    <option value="verde" selected>Línea Verde</option>
-                                    <option value="roja">Línea Roja</option>
-                                    <option value="amarilla">Línea Amarilla</option>
-                                    <option value="azul">Línea Azul</option>
-                                    <option value="celeste">Línea Celeste</option>
-                                    <option value="morada">Línea Morada</option>
-                                    <option value="naranja">Línea Naranja</option>
-                                    <option value="blanca">Línea Blanca</option>
+                                    <option value="verde" selected>Línea Verde</option><option value="roja">Línea Roja</option><option value="amarilla">Línea Amarilla</option><option value="azul">Línea Azul</option><option value="celeste">Línea Celeste</option><option value="morada">Línea Morada</option><option value="naranja">Línea Naranja</option><option value="blanca">Línea Blanca</option>
                                 </select>
                             </div>
                             <div class="field"><label for="componente">Componente</label><input type="text" id="componente" placeholder="Ej. Cable tractor L2" maxlength="40" required></div>
@@ -99,6 +103,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- El historial de mantenimiento ya es la tabla de registros, no se duplica -->
             </section>
 
             <!-- MÓDULO 3: VIENTO -->
@@ -114,6 +119,17 @@
                     <div class="field field-btn mt-3"><button type="submit" class="btn btn-dark">Analizar viento</button></div>
                 </form>
                 <div id="resultadoViento" class="result-box" hidden></div>
+
+                <!-- HISTORIAL MÓDULO 3 -->
+                <div class="history-section mt-4">
+                    <div class="sub-head"><h3 class="sub-title">Historial de Análisis</h3><button class="btn btn-outline btn-sm" onclick="limpiarHistorial('m3')">Limpiar</button></div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead><tr><th>Fecha/Hora</th><th>Mediciones</th><th>Promedio</th><th>Máximo</th><th>Clasificación</th></tr></thead>
+                            <tbody id="historialM3"></tbody>
+                        </table>
+                    </div>
+                </div>
             </section>
 
             <!-- MÓDULO 4: SENSORES -->
@@ -136,6 +152,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- El historial de sensores ya es la tabla de registros, no se duplica -->
             </section>
         </div>
     </main>

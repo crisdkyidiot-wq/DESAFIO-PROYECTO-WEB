@@ -167,3 +167,6 @@ input:focus,select:focus{outline:none; background:var(--hover);}
     .sensor-layout{grid-template-columns:1fr;}
 }
 @media(max-width:600px){ .form-row, .wind-inputs{grid-template-columns:1fr;} .maint-layout{grid-template-columns:1fr;} }
+/* Historial */
+.history-section { margin-top: 32px; padding-top: 24px; border-top: 1px dashed var(--line); }
+.history-section .sub-head { margin-bottom: 12px; }

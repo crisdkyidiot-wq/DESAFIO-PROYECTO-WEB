@@ -49,6 +49,7 @@ Todos los umbrales, calculos y resultados presentados en esta aplicacion son de 
 
 ## Autores
 - Christian Aguayo Condori
+- Cristian Pablo Rojas Condori
 
 ## Contexto Academico
 Proyecto desarrollado para la asignatura Programacion Web I. Desafio presencial de dos horas.
